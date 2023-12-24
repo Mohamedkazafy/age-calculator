@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Age calculator app</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution { font-size: 11px; text-align: center; }
+    .attribution a { color: hsl(228, 45%, 44%); }
+    *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+}
+
+body{
+    background-color: hsl(0, 0%, 94%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.container{
+    background-color:#fff;
+    width: 750px;
+    height: 350px;    
+    border: none;
+    border-radius: 15px 15px 50px 15px;
+}
+.inputs{
+    margin-bottom: 10px;
+    display: flex;
+    margin-top: 20px;
+    border-radius: 15px;
+}
+label {
+    display: block;
+} 
+input{
+    font-size: 15px;
+    font-weight: 700;
+}
+input:focus,
+input:hover{
+    border-color: blueviolet;
+    transition: 0.5s ease-in-out;
+}
+button{
+    background-color: hsl(0, 0%, 8%);
+    border: none;
+    border-radius: 50% ;
+    display: flex;
+    justify-content: start;
+    align-items: end;
+    position:relative;
+    top: 10px;
+    cursor: pointer;
+}
+.result{
+    font-size: 55px;
+    font-weight: 900;
+    margin-left: 15px;
+}
+.indity{
+    color: blueviolet;
+}
+
+@media (min-width: 280px) and (max-width:750px) {
+    .container {
+        width: 100%;
+        border-radius: 15px;
+        height: 100%;
+    }
+
+    .inputs {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    input{
+        width: 25%;
+    }
+
+    button {
+        margin-top: 10px;
+    }
+
+    .result {
+        font-size: 40px;
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .indity {
+        display: block;
+        text-align: center;
+    }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p id="text" style="color: red;"></p>
+    <div class="inputs">
+        <label>Day</label>
+      <input placeholder="DD" id="days" type="number">
+
+      <label>Month</label>
+      <input type="number" id="monthes" placeholder="MM">
+
+      <label>Year</label>  
+      <input type="number" id="years" placeholder="YYYY">
+      <button id="submit"><svg xmlns="http://www.w3.org/2000/svg" width="46" height="44" viewBox="0 0 46 44"><g fill="none" stroke="#FFF" stroke-width="2"><path d="M1 22.019C8.333 21.686 23 25.616 23 44M23 44V0M45 22.019C37.667 21.686 23 25.616 23 44"/></g></svg></button>
+    </div>
+    <hr>
+    <div class="result">
+      <p id="yearsNum"><span id="yearsNumber" class="indity">--</span>years</p>
+      <p id="monthNum"><span id="monthesNumber" class="indity">--</span>months</p>
+      <p id="daysNum"><span id="daysNumber" class="indity">--</span>days</p>
+    </div>
+  </div>
+  <!-- <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Your Name Here</a>.
+  </div> -->
+  <script>
+    let days = document.getElementById("days");
+let monthes = document.getElementById("monthes");
+let years = document.getElementById("years");
+let submitBtn = document.getElementById("submit");
+let yearsNum = document.getElementById("yearsNumber");
+let monthesNum = document.getElementById("monthesNumber");
+let daysNum = document.getElementById("daysNumber");
+let inputs = document.querySelector("input");
+let text = document.getElementById("text");
+var today = new Date();
+var day = today.getDate();
+var month = today.getMonth() + 1;
+var year = today.getFullYear();
+
+submitBtn.addEventListener("click", function() {
+    inputs.style.border = "";
+    text.innerHTML = "";
+
+    if (monthes.value == 2 && days.value > 29) {
+        text.innerHTML = "Invalid date: February cannot have more than 29 days";
+        inputs.style.border = "1px solid red";
+    } else if (days.value > day && monthes.value > month && years.value > year) {
+        text.innerHTML = "Invalid date: Future date is not allowed";
+        inputs.style.border = "1px solid red";
+    } else if (days.value > 31 || monthes.value > 12) {
+        text.innerHTML = "Invalid date";
+        inputs.style.border = "1px solid red";
+    } else if (year !== years.value && month !== monthes.value && day !== days.value && month - monthes.value < 1) {
+        yearsNum.innerHTML = Math.max(year - years.value + 1, 0);
+        monthesNum.innerHTML = Math.max(month - monthes.value, 0);
+        daysNum.innerHTML = Math.max(day - days.value, 0);
+    } else if (year === years.value && month === monthes.value && day === days.value) {
+        text.innerHTML = "Baby just born";
+        text.style.color = "green";
+    } else if (year !== years.value && month !== monthes.value && day < days.value) {
+        yearsNum.innerHTML = Math.max(year - years.value, Math.abs(year - years.value));
+        monthesNum.innerHTML = Math.max(month - monthes.value + 1, 0);
+        daysNum.innerHTML = Math.max(day - days.value, Math.abs(day - days.value));
+    } else {
+        yearsNum.innerHTML = Math.max(year - years.value, 0);
+        monthesNum.innerHTML = Math.max(month - monthes.value, 0);
+        daysNum.innerHTML = Math.max(day - days.value, 0);
+    }
+});
+
+  </script>
+</body>
+</html>
